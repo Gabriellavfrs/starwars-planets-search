@@ -5,6 +5,7 @@ export const AppContext = createContext();
 
 function AppProvider({ children }) {
   const [planetsData, setPlanetsData] = useState([]);
+  const [filteredPlanets, setFilterPlanetName] = useState([]);
   const [error, setError] = useState(null);
 
   const fetchData = useCallback(async () => {
@@ -20,13 +21,21 @@ function AppProvider({ children }) {
         return planet;
       });
       setPlanetsData(filteredResult);
+      setFilterPlanetName(filteredResult);
     } catch (e) {
       setError(e);
       throw new Error(e);
     }
   }, []);
   return (
-    <AppContext.Provider value={ { planetsData, error, fetchData } }>
+    <AppContext.Provider
+      value={ {
+        planetsData,
+        filteredPlanets,
+        setFilterPlanetName,
+        error,
+        fetchData } }
+    >
       {children}
     </AppContext.Provider>
   );
