@@ -24,6 +24,10 @@ function FormFilter() {
     { column: 'population', comparison: 'maior que', number: '0' },
   );
 
+  const [orderFilter, setOrderFilter] = useState(
+    { column: 'population', sort: '' },
+  );
+
   const handleFilterTag = ({ target }) => {
     // console.log(filter);
     const { name, value } = target;
@@ -59,6 +63,28 @@ function FormFilter() {
       return filtered;
     });
     setFilterPlanets(filtered);
+  };
+
+  const handleClick = () => {
+    setFilterTags([...filterTags, filter]);
+  };
+
+  const handleOrder = ({ target }) => {
+    const { name, value } = target;
+    setOrderFilter((prevState) => ({ ...prevState, [name]: value }));
+  };
+
+  const handleOrderData = () => {
+    const { column, sort } = orderFilter;
+    const validData = filteredPlanets
+      .filter((planet) => planet[column] !== 'unknown');
+    const invalidData = filteredPlanets
+      .filter((planet) => planet[column] === 'unknown');
+    const orderedValidData = validData
+      .sort((a, b) => (sort === 'ASC'
+        ? Number(a[column]) - Number(b[column])
+        : Number(b[column]) - Number(a[column])));
+    setFilterPlanets([...orderedValidData, ...invalidData]);
   };
 
   useEffect(() => {
@@ -122,9 +148,51 @@ function FormFilter() {
         <button
           type="button"
           data-testid="button-filter"
-          onClick={ () => setFilterTags([...filterTags, filter]) }
+          onClick={ handleClick }
         >
           FILTRAR
+
+        </button>
+        <div>
+          <label>
+            Ordenar
+            <select
+              data-testid="column-sort"
+              name="column"
+              onChange={ handleOrder }
+            >
+              {initialOptions.map((option) => (
+                <option key={ option } value={ option }>{option}</option>
+              ))}
+            </select>
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="sort"
+              value="ASC"
+              data-testid="column-sort-input-asc"
+              onChange={ handleOrder }
+            />
+            Ascendente
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="sort"
+              value="DESC"
+              data-testid="column-sort-input-desc"
+              onChange={ handleOrder }
+            />
+            Descendente
+          </label>
+        </div>
+        <button
+          type="button"
+          data-testid="column-sort-button"
+          onClick={ handleOrderData }
+        >
+          ORDENAR
 
         </button>
         <button
