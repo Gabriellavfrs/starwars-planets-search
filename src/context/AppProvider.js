@@ -1,12 +1,14 @@
-import { createContext, useCallback, useState } from 'react';
+import { createContext, useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 
 export const AppContext = createContext();
 
 function AppProvider({ children }) {
   const [planetsData, setPlanetsData] = useState([]);
-  const [filteredPlanets, setFilterPlanetName] = useState([]);
+  const [filteredPlanets, setFilterPlanets] = useState([]);
   const [error, setError] = useState(null);
+  const [inputText, setInputText] = useState('');
+  const [filterTags, setFilterTags] = useState([]);
 
   const fetchData = useCallback(async () => {
     try {
@@ -21,20 +23,32 @@ function AppProvider({ children }) {
         return planet;
       });
       setPlanetsData(filteredResult);
-      setFilterPlanetName(filteredResult);
+      setFilterPlanets(filteredResult);
     } catch (e) {
       setError(e);
       throw new Error(e);
     }
   }, []);
+
+  useEffect(() => {
+    // console.log('entrei');
+    fetchData();
+  }, [fetchData]);
+
+  const values = useMemo(() => ({
+    planetsData,
+    filteredPlanets,
+    setFilterPlanets,
+    error,
+    inputText,
+    setInputText,
+    filterTags,
+    setFilterTags,
+  }), [planetsData, filteredPlanets, error, inputText, filterTags, setFilterTags]);
+
   return (
     <AppContext.Provider
-      value={ {
-        planetsData,
-        filteredPlanets,
-        setFilterPlanetName,
-        error,
-        fetchData } }
+      value={ values }
     >
       {children}
     </AppContext.Provider>

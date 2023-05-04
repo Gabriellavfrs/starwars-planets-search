@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { AppContext } from '../context/AppProvider';
 
 function Table() {
-  const { filteredPlanets } = useContext(AppContext);
+  const { filteredPlanets, inputText } = useContext(AppContext);
   return (
     filteredPlanets.length > 0 && (
       <table>
@@ -24,9 +24,10 @@ function Table() {
           </tr>
         </thead>
         <tbody>
-          {filteredPlanets.map((planet) =>
-            // const keys = Object.keys(planetsData[0]);
-            (
+          {filteredPlanets
+            .filter(({ name }) => name.includes(inputText))
+            .map((planet) => (
+              // const keys = Object.keys(planetsData[0]);
               <tr key={ planet.name }>
                 <td>{planet.name}</td>
                 <td>{planet.rotation_period}</td>
