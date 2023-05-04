@@ -40,13 +40,14 @@ function FormFilter() {
       // const xablau = action === 'include' ? filteredPlanets :
       switch (comparison) {
       case ('maior que'):
-        filtered = filteredPlanets.filter((tag) => tag[column] > Number(number));
+        filtered = filteredPlanets.filter((tag) => Number(tag[column]) > Number(number));
         break;
       case ('menor que'):
-        filtered = filteredPlanets.filter((tag) => tag[column] < Number(number));
+        filtered = filteredPlanets.filter((tag) => Number(tag[column]) < Number(number));
         break;
       case ('igual a'):
-        filtered = filteredPlanets.filter((tag) => tag[column] === Number(number));
+        filtered = filteredPlanets
+          .filter((tag) => Number(tag[column]) === Number(number));
         break;
       default:
         filtered = planetsData;
@@ -107,11 +108,13 @@ function FormFilter() {
           <input
             type="number"
             name="number"
+            value={ filter.number }
             data-testid="value-filter"
             onChange={ handleFilter }
           />
           <button
             type="button"
+            data-testid="button-filter"
             onClick={ () => setFilterTags([...filterTags, filter]) }
           >
             FILTRAR
