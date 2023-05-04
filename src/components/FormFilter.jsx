@@ -36,7 +36,8 @@ function FormFilter() {
       return filtered;
     }
     filterTags.map(({ column, comparison, number }) => {
-      // const newOptions = options.filter((option) => option !== column)
+      const newOptions = options.filter((option) => option !== column);
+      setOptions(newOptions);
       // const xablau = action === 'include' ? filteredPlanets :
       switch (comparison) {
       case ('maior que'):
@@ -63,7 +64,6 @@ function FormFilter() {
   };
 
   useEffect(() => {
-    console.log(filterTags);
     handleIncludeFilter();
   }, [filterTags]);
 
