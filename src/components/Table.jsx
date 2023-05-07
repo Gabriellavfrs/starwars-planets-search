@@ -2,7 +2,11 @@ import { useContext } from 'react';
 import { AppContext } from '../context/AppProvider';
 
 function Table() {
-  const { filteredPlanets, inputText } = useContext(AppContext);
+  const { filteredPlanets, inputText, errorMessage } = useContext(AppContext);
+
+  if (errorMessage) {
+    return (<p>{errorMessage}</p>);
+  }
   return (
     filteredPlanets.length > 0 && (
       <table>

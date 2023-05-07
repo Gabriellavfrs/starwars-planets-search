@@ -53,12 +53,9 @@ function FormFilter() {
       case ('menor que'):
         filtered = filteredPlanets.filter((tag) => Number(tag[column]) < Number(number));
         break;
-      case ('igual a'):
+      default:
         filtered = filteredPlanets
           .filter((tag) => Number(tag[column]) === Number(number));
-        break;
-      default:
-        filtered = planetsData;
       }
       return filtered;
     });

@@ -6,17 +6,13 @@ export const AppContext = createContext();
 function AppProvider({ children }) {
   const [planetsData, setPlanetsData] = useState([]);
   const [filteredPlanets, setFilterPlanets] = useState([]);
-  const [error, setError] = useState(null);
+  const [errorMessage, setErrorMesage] = useState(null);
   const [inputText, setInputText] = useState('');
   const [filterTags, setFilterTags] = useState([]);
 
   const fetchData = useCallback(async () => {
     try {
       const data = await fetch('https://swapi.dev/api/planets/');
-      if (!data.ok) {
-        const newError = await data.json();
-        throw new Error(newError.message);
-      }
       const result = await data.json();
       const filteredResult = result.results.map((planet) => {
         delete planet.residents;
@@ -24,9 +20,8 @@ function AppProvider({ children }) {
       });
       setPlanetsData(filteredResult);
       setFilterPlanets(filteredResult);
-    } catch (e) {
-      setError(e);
-      throw new Error(e);
+    } catch (error) {
+      setErrorMesage(error.message);
     }
   }, []);
 
@@ -39,12 +34,12 @@ function AppProvider({ children }) {
     planetsData,
     filteredPlanets,
     setFilterPlanets,
-    error,
+    errorMessage,
     inputText,
     setInputText,
     filterTags,
     setFilterTags,
-  }), [planetsData, filteredPlanets, error, inputText, filterTags, setFilterTags]);
+  }), [planetsData, filteredPlanets, errorMessage, inputText, filterTags, setFilterTags]);
 
   return (
     <AppContext.Provider
