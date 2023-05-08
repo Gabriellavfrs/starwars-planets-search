@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import React from 'react';
+import { render, screen } from '@testing-library/react';
 import { errorMessage, planetsData } from './mocks';
 import App from '../App';
-import AppProvider, { AppContext } from '../context/AppProvider';
+import AppProvider from '../context/AppProvider';
 import userEvent from '@testing-library/user-event';
 
 describe('<AppProvider />', () => {
